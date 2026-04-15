@@ -24,6 +24,8 @@ class Contract:
         self.updated_at: datetime.datetime = updated_at or current_datetime
 
     def finish_process(self) -> None:
+        if self.status == ContractStatus.CREATED:
+            return
         if self.status != ContractStatus.PROCESSING:
             raise ContractError(
                 "Can not finish process if status is not PROCESSING."
