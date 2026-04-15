@@ -22,3 +22,14 @@ class Contract:
         current_datetime = datetime.datetime.now(tz=datetime.timezone.utc)
         self.created_at: datetime.datetime = created_at or current_datetime
         self.updated_at: datetime.datetime = updated_at or current_datetime
+
+    def finish_process(self) -> None:
+        if self.status != ContractStatus.PROCESSING:
+            raise ContractError(
+                "Can not finish process if status is not PROCESSING."
+            )
+        self.status = ContractStatus.CREATED
+
+
+class ContractError(Exception):
+    pass
