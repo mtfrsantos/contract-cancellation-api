@@ -9,6 +9,9 @@ from app.insert_contract_query_factory import InsertContractQueryFactory
 from app.select_contract_by_id_query_factory import (
     SelectContractByIdQueryFactory,
 )
+from app.update_contract_status_query_factory import (
+    UpdateContractStatusQueryFactory,
+)
 
 
 class ContractRepository:
@@ -29,6 +32,19 @@ class ContractRepository:
         assert result, "Result should never be empty."
         single_result = self.get_single_result(result)
         return Contract.restore(**single_result)
+
+    async def update_status(
+        self,
+        contract_id: str,
+        new_status: ContractStatus,
+        expected_status: ContractStatus,
+    ) -> None:
+        query = UpdateContractStatusQueryFactory().execute(
+            contract_id=contract_id,
+            new_status=new_status,
+            expected_status=expected_status,
+        )
+        _ = await self._database.execute_query(query)
 
     def get_single_result(
         self, result: list[dict[str, Any]]
