@@ -1,0 +1,17 @@
+services:
+  postgresql:
+    image: postgres:17
+    container_name: cancellation
+    environment:
+      POSTGRES_PASSWORD: cancellation
+      POSTGRES_USER: cancellation
+      POSTGRES_DB: cancellation
+    ports:
+      - "5555:5432"
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgresql:
+
