@@ -29,11 +29,21 @@ def test_contract_finish_process() -> None:
     assert contract.status == ContractStatus.CREATED
 
 
-def test_contract_finish_process_not_processing_error() -> None:
+def test_contract_finish_process_status_created() -> None:
     contract = Contract(
         amount=Decimal("1000"),
         refundable_amount=Decimal("1000"),
         status=ContractStatus.CREATED,
+    )
+    contract.finish_process()
+    assert contract.status == ContractStatus.CREATED
+
+
+def test_contract_finish_process_not_processing_error() -> None:
+    contract = Contract(
+        amount=Decimal("1000"),
+        refundable_amount=Decimal("1000"),
+        status=ContractStatus.CANCELLED,
     )
     with pytest.raises(
         ContractError,
