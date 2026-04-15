@@ -37,6 +37,6 @@ def test_contract_finish_process_not_processing_error() -> None:
     )
     with pytest.raises(
         ContractError,
-        match="Can not finish process if status is not processing.",
+        match="Can not finish process if status is not PROCESSING.",
     ):
         contract.finish_process()
