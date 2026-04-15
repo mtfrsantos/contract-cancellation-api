@@ -46,3 +46,37 @@ async def test_contract_repository_get_by_id(
     assert contract == recovered_contract
 
 
+@pytest.mark.asyncio(loop_scope="session")
+async def test_contract_repository_update_status(
+    database_pool: AsyncConnectionPool,
+) -> None:
+    contract = Contract(
+        amount=Decimal("1000"),
+        refundable_amount=Decimal("1000"),
+    )
+    before_status = contract.status
+    assert before_status == ContractStatus.PROCESSING
+    contract_repository = ContractRepository(pool=database_pool)
+    contract_id = await contract_repository.save(contract)
+    before_finish_process_recovered_contract = (
+        await contract_repository.get_by_id(contract_id)
+    )
+    assert (
+        before_finish_process_recovered_contract.status
+        == ContractStatus.PROCESSING
+    )
+    contract.finish_process()
+    after_status = contract.status
+    assert after_status == ContractStatus.CREATED
+    await contract_repository.update_status(
+        contract_id=contract_id,
+        new_status=after_status,
+        expected_status=before_status,
+    )
+    after_finish_process_recovered_contract = (
+        await contract_repository.get_by_id(contract_id)
+    )
+    assert (
+        after_finish_process_recovered_contract.status
+        == ContractStatus.CREATED
+    )
