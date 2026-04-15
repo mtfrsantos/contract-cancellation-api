@@ -1,8 +1,8 @@
-from enum import IntEnum
+from enum import StrEnum
 
 
-class ContractStatus(IntEnum):
-    CREATED = 1
-    PROCESSING = 2
-    CANCELLED = 3
-    FAILED = 4
+class ContractStatus(StrEnum):
+    CREATED = "CREATED"
+    PROCESSING = "PROCESSING"
+    CANCELLED = "CANCELLED"
+    FAILED = "FAILED"
