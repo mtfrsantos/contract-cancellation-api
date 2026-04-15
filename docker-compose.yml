@@ -6,6 +6,7 @@ services:
       POSTGRES_PASSWORD: cancellation
       POSTGRES_USER: cancellation
       POSTGRES_DB: cancellation
+      TZ: UTC
     ports:
       - "5555:5432"
     volumes:
