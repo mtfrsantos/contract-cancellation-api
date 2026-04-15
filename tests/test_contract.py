@@ -1,3 +1,4 @@
+import datetime
 from decimal import Decimal
 
 import pytest
@@ -50,3 +51,57 @@ def test_contract_finish_process_not_processing_error() -> None:
         match="Can not finish process if status is not PROCESSING.",
     ):
         contract.finish_process()
+
+
+def test_contract_cancel() -> None:
+    contract = Contract(
+        amount=Decimal("1000"),
+        refundable_amount=Decimal("1000"),
+    )
+    assert contract.status == ContractStatus.PROCESSING
+    contract.finish_process()
+    assert contract.status == ContractStatus.CREATED
+    contract.cancel()
+    assert contract.status == ContractStatus.CANCELLED
+
+
+def test_contract_cancel_status_cancelled() -> None:
+    contract = Contract(
+        amount=Decimal("1000"),
+        refundable_amount=Decimal("1000"),
+        status=ContractStatus.CANCELLED,
+    )
+    contract.cancel()
+    assert contract.status == ContractStatus.CANCELLED
+
+
+def test_contract_cancel_after_one_week() -> None:
+    current_datetime = datetime.datetime.now(tz=datetime.timezone.utc)
+    created_at = current_datetime - datetime.timedelta(days=10)
+    contract = Contract(
+        amount=Decimal("1000"),
+        refundable_amount=Decimal("1000"),
+        created_at=created_at,
+        updated_at=created_at,
+    )
+    contract.finish_process()
+    assert contract.status == ContractStatus.CREATED
+    with pytest.raises(
+        ContractError,
+        match="Can not cancel contract, 7 days window has passed.",
+    ):
+        contract.cancel()
+
+
+def test_contract_cancel_no_refundable_amount() -> None:
+    contract = Contract(
+        amount=Decimal("1000"),
+        refundable_amount=Decimal("0"),
+    )
+    contract.finish_process()
+    assert contract.status == ContractStatus.CREATED
+    with pytest.raises(
+        ContractError,
+        match="Can not cancel contract, no refundable amount available.",
+    ):
+        contract.cancel()
