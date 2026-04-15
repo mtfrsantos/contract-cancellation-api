@@ -35,7 +35,6 @@ async def test_contracts_controller(client: AsyncClient) -> None:
     response = await client.post(url=f"{BASE_URL}/contracts", json=payload)
     assert response.status_code == HTTPStatus.ACCEPTED
     response_json = response.json()
-    print(response_json)
     assert response_json.get("contract_id")
     assert response_json.get("amount") == "1000"
     assert response_json.get("refundable_amount") == "1000"
