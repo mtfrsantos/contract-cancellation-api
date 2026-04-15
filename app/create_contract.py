@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 from app.contract import Contract
 from app.contract_repository import ContractRepository
-from app.contract_status import ContractStatus
 
 
 class CreateContractInput(BaseModel):
@@ -37,7 +36,7 @@ class CreateContract:
             amount=input_data.amount,
             refundable_amount=input_data.refundable_amount,
         )
-        contract.status = ContractStatus.CREATED
+        contract.finish_process()
         contract_id = await self._contract_repository.save(contract)
         assert contract_id, "Should always return contract_id."
         return CreateContractOutput(
