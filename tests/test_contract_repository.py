@@ -5,10 +5,10 @@ import pytest
 import pytest_asyncio
 from psycopg_pool import AsyncConnectionPool
 
-from app.contract import Contract
-from app.contract_repository import ContractRepository
-from app.contract_status import ContractStatus
-from app.tables_truncater import TablesTruncater
+from app.domain.contract import Contract
+from app.domain.contract_status import ContractStatus
+from app.infra.tables_truncater import TablesTruncater
+from app.repositories.contract_repository import ContractRepository
 
 
 @pytest_asyncio.fixture(autouse=True, loop_scope="session")

@@ -1,5 +1,5 @@
-from app.contract import Contract
-from app.query import Query
+from app.domain.contract import Contract
+from app.infra.query import Query
 
 
 class InsertContractQueryFactory:

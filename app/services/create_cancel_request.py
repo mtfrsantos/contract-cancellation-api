@@ -3,12 +3,12 @@ from dataclasses import dataclass
 from psycopg_pool import AsyncConnectionPool
 from pydantic import BaseModel
 
-from app.cancel_request import CancelRequest
-from app.cancel_request_repository import CancelRequestRepository
-from app.cancel_request_status import CancelRequestStatus
-from app.contract import Contract, ContractError
-from app.contract_repository import ContractRepository
-from app.contract_status import ContractStatus
+from app.domain.cancel_request import CancelRequest
+from app.domain.cancel_request_status import CancelRequestStatus
+from app.domain.contract import Contract, ContractError
+from app.domain.contract_status import ContractStatus
+from app.repositories.cancel_request_repository import CancelRequestRepository
+from app.repositories.contract_repository import ContractRepository
 
 
 class CreateCancelRequestInput(BaseModel):

@@ -4,8 +4,8 @@ from dataclasses import dataclass
 from psycopg_pool import AsyncConnectionPool
 from pydantic import BaseModel
 
-from app.contract_repository import ContractRepository
-from app.contract_status import ContractStatus
+from app.domain.contract_status import ContractStatus
+from app.repositories.contract_repository import ContractRepository
 
 
 class ReprocessContractInput(BaseModel):

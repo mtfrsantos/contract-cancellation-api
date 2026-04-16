@@ -4,9 +4,9 @@ from uuid import uuid4
 
 import pytest
 
-from app.cancel_request import CancelRequest, CancelRequestError
-from app.cancel_request_status import CancelRequestStatus
-from app.contract import Contract
+from app.domain.cancel_request import CancelRequest, CancelRequestError
+from app.domain.cancel_request_status import CancelRequestStatus
+from app.domain.contract import Contract
 
 
 def test_cancel_request() -> None:

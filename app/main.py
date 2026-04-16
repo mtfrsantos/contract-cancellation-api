@@ -4,9 +4,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from psycopg_pool import AsyncConnectionPool
 
-from app.contracts_controller import contracts_controller
-from app.environment_variables import environment_variables
-from app.logger import logger
+from app.api.contracts_controller import contracts_controller
+from app.infra.environment_variables import environment_variables
+from app.infra.logger import logger
 
 
 @asynccontextmanager

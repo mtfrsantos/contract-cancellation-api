@@ -1,5 +1,5 @@
-from app.contract_status import ContractStatus
-from app.query import Query
+from app.domain.contract_status import ContractStatus
+from app.infra.query import Query
 
 
 class UpdateContractStatusQueryFactory:

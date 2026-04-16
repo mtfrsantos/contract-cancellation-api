@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Self, override
 from uuid import UUID, uuid4
 
-from app.contract_status import ContractStatus
+from app.domain.contract_status import ContractStatus
 
 
 class Contract:

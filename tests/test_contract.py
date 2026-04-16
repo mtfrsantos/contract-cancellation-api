@@ -4,8 +4,8 @@ from uuid import uuid4
 
 import pytest
 
-from app.contract import Contract, ContractError
-from app.contract_status import ContractStatus
+from app.domain.contract import Contract, ContractError
+from app.domain.contract_status import ContractStatus
 
 
 def test_contract() -> None:

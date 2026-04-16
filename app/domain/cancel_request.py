@@ -2,7 +2,7 @@ import datetime
 from typing import Self, override
 from uuid import UUID, uuid4
 
-from app.cancel_request_status import CancelRequestStatus
+from app.domain.cancel_request_status import CancelRequestStatus
 
 
 class CancelRequest:

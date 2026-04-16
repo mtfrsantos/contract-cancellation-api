@@ -10,10 +10,10 @@ from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from psycopg_pool import AsyncConnectionPool
 
-from app.contract import Contract
-from app.contract_repository import ContractRepository
-from app.contract_status import ContractStatus
-from app.contracts_controller import contracts_controller
+from app.api.contracts_controller import contracts_controller
+from app.domain.contract import Contract
+from app.domain.contract_status import ContractStatus
+from app.repositories.contract_repository import ContractRepository
 
 BASE_URL = "http://test.com"
 

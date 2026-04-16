@@ -4,8 +4,8 @@ from decimal import Decimal
 from psycopg_pool import AsyncConnectionPool
 from pydantic import BaseModel
 
-from app.contract import Contract
-from app.contract_repository import ContractRepository
+from app.domain.contract import Contract
+from app.repositories.contract_repository import ContractRepository
 
 
 class CreateContractInput(BaseModel):

@@ -4,7 +4,7 @@ from typing import Any
 import pytest_asyncio
 from psycopg_pool import AsyncConnectionPool
 
-from app.environment_variables import environment_variables
+from app.infra.environment_variables import environment_variables
 
 
 @pytest_asyncio.fixture(scope="session", loop_scope="session")

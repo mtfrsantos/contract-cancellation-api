@@ -2,14 +2,16 @@ from typing import Any
 
 from psycopg_pool import AsyncConnectionPool
 
-from app.contract import Contract
-from app.contract_status import ContractStatus
-from app.database import Database
-from app.insert_contract_query_factory import InsertContractQueryFactory
-from app.select_contract_by_id_query_factory import (
+from app.domain.contract import Contract
+from app.domain.contract_status import ContractStatus
+from app.infra.database import Database
+from app.repositories.insert_contract_query_factory import (
+    InsertContractQueryFactory,
+)
+from app.repositories.select_contract_by_id_query_factory import (
     SelectContractByIdQueryFactory,
 )
-from app.update_contract_status_query_factory import (
+from app.repositories.update_contract_status_query_factory import (
     UpdateContractStatusQueryFactory,
 )
 

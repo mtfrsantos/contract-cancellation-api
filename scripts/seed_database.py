@@ -4,7 +4,7 @@ from pathlib import Path
 import psycopg
 from psycopg_pool import AsyncConnectionPool
 
-from app.environment_variables import environment_variables
+from app.infra.environment_variables import environment_variables
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATABASE_SQL_PATH = PROJECT_ROOT / "database.sql"

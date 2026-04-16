@@ -1,5 +1,5 @@
-from app.cancel_request_status import CancelRequestStatus
-from app.query import Query
+from app.domain.cancel_request_status import CancelRequestStatus
+from app.infra.query import Query
 
 
 class UpdateCancelRequestStatusQueryFactory:

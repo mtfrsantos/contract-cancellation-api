@@ -7,7 +7,7 @@ from structlog.processors import CallsiteParameter, CallsiteParameterAdder
 from structlog.stdlib import BoundLogger
 from structlog.typing import Processor
 
-from app.environment_variables import environment_variables
+from app.infra.environment_variables import environment_variables
 
 
 def configure_logger() -> None:

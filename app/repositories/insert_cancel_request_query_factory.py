@@ -1,5 +1,5 @@
-from app.cancel_request import CancelRequest
-from app.query import Query
+from app.domain.cancel_request import CancelRequest
+from app.infra.query import Query
 
 
 class InsertCancelRequestQueryFactory:

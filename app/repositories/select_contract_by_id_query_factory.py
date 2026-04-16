@@ -1,4 +1,4 @@
-from app.query import Query
+from app.infra.query import Query
 
 
 class SelectContractByIdQueryFactory:

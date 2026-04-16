@@ -1,7 +1,7 @@
 from psycopg_pool import AsyncConnectionPool
 
-from app.database import Database
-from app.query import Query
+from app.infra.database import Database
+from app.infra.query import Query
 
 
 class TablesTruncater:

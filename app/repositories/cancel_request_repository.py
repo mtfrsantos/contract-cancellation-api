@@ -2,16 +2,16 @@ from typing import Any
 
 from psycopg_pool import AsyncConnectionPool
 
-from app.cancel_request import CancelRequest
-from app.cancel_request_status import CancelRequestStatus
-from app.database import Database
-from app.insert_cancel_request_query_factory import (
+from app.domain.cancel_request import CancelRequest
+from app.domain.cancel_request_status import CancelRequestStatus
+from app.infra.database import Database
+from app.repositories.insert_cancel_request_query_factory import (
     InsertCancelRequestQueryFactory,
 )
-from app.select_cancel_request_by_idempotency_key_query_factory import (
+from app.repositories.select_cancel_request_by_idempotency_key_query_factory import (
     SelectCancelRequestByIdempotencyKeyQueryFactory,
 )
-from app.update_cancel_request_status_query_factory import (
+from app.repositories.update_cancel_request_status_query_factory import (
     UpdateCancelRequestStatusQueryFactory,
 )
 
