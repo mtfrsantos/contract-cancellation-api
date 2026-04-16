@@ -21,5 +21,10 @@ class EnvironmentVariables:
     def MAXIMUM_POOL_SIZE(self) -> int:
         return int(os.getenv("MAXIMUM_POOL_SIZE") or 1)
 
+    @property
+    def DEPLOY_MODE(self) -> str:
+        deploy_mode = os.getenv("DEPLOY_MODE") or "PRODUCTION"
+        return str(deploy_mode)
+
 
 environment_variables = EnvironmentVariables()
