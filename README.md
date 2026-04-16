@@ -17,6 +17,7 @@
 ## Passos para execução em docker
 
 - docker compose up -d --build
+- Conferir `http://localhost:8000/docs`
 
 ## Exemplo de `.env`
 
