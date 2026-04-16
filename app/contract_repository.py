@@ -22,15 +22,16 @@ class ContractRepository:
         query = InsertContractQueryFactory().execute(contract)
         result = await self._database.execute_query(query)
         assert result, "Result should never be empty."
-        single_result = self.get_single_result(result)
+        single_result = self._get_single_result(result)
         contract_id_uuid = single_result.get("contract_id") or ""
         return str(contract_id_uuid)
 
     async def get_by_id(self, contract_id: str) -> Contract:
         query = SelectContractByIdQueryFactory().execute(contract_id)
         result = await self._database.execute_query(query)
-        assert result, "Result should never be empty."
-        single_result = self.get_single_result(result)
+        if not result:
+            raise ValueError("Contract not found.")
+        single_result = self._get_single_result(result)
         return Contract.restore(**single_result)
 
     async def update_status(
@@ -39,6 +40,8 @@ class ContractRepository:
         new_status: ContractStatus,
         expected_status: ContractStatus,
     ) -> None:
+        if new_status == expected_status:
+            return
         query = UpdateContractStatusQueryFactory().execute(
             contract_id=contract_id,
             new_status=new_status,
@@ -46,7 +49,7 @@ class ContractRepository:
         )
         _ = await self._database.execute_query(query)
 
-    def get_single_result(
+    def _get_single_result(
         self, result: list[dict[str, Any]]
     ) -> dict[str, Any]:
         assert len(result) == 1, "Should contain only single result."
