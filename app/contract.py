@@ -1,7 +1,7 @@
 import datetime
 from decimal import Decimal
-from typing import Any, Self, override
-from uuid import uuid4
+from typing import Self, override
+from uuid import UUID, uuid4
 
 from app.contract_status import ContractStatus
 
@@ -43,13 +43,14 @@ class Contract:
         amount: Decimal,
         refundable_amount: Decimal,
         status: str,
-        contract_id: Any,
+        contract_id: UUID | str,
         created_at: datetime.datetime,
         updated_at: datetime.datetime,
     ) -> Self:
         assert isinstance(amount, Decimal)
         assert isinstance(refundable_amount, Decimal)
         assert isinstance(status, str)
+        assert isinstance(contract_id, UUID) or isinstance(contract_id, str)
         assert isinstance(created_at, datetime.datetime)
         assert isinstance(updated_at, datetime.datetime)
         instance = cls.__new__(cls)
