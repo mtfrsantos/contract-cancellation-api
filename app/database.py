@@ -27,5 +27,4 @@ class Database:
                     )
                 if cursor.description:
                     result = await cursor.fetchall()
-                    assert result, "Result should never be empty."
         return result
