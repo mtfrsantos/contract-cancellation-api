@@ -36,14 +36,14 @@ class CreateContract:
             amount=input_data.amount,
             refundable_amount=input_data.refundable_amount,
         )
-        old_status = contract.status
+        initial_status = contract.status
         contract_id = await self._contract_repository.save(contract)
         assert contract_id, "Should always return contract_id."
         contract.finish_process()
         await self._contract_repository.update_status(
             contract_id=contract_id,
             new_status=contract.status,
-            expected_status=old_status,
+            expected_status=initial_status,
         )
         return CreateContractOutput(
             contract_id=contract_id,
