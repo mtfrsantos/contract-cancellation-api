@@ -6,6 +6,27 @@
 - uv
 - docker & docker compose
 
+## Passos para execução local
+
+- Criar arquivo `.env`. Ver exemplo
+- Executar `uv sync`
+- Criar banco de dados postgresql
+- Executar o script `seed_database.py` ao menos um vez. Ex.: `python -m scripts.seed_database`
+- Executar a aplicação com o seguinte comando: `uv run uvicorn app.main:app`
+
+## Passos para execução em docker
+
+- docker compose up -d --build
+
+## Exemplo de `.env`
+
+```[bash]
+DEPLOY_MODE="DEVELOPMENT"
+DATABASE_URL="postgresql://cancellation:cancellation@localhost:5555/cancellation"
+MINIMUM_POOL_SIZE=1
+MAXIMUM_POOL_SIZE=10
+```
+
 ## Comportamento
 
 O comportamento do sistema foi descrito utilizando a linguagem Guerkin. Onde
@@ -106,7 +127,37 @@ de "PROCESSING"
     Então o sistema deve retornar uma mensagem de falha
 ```
 
+## Decisões técnicas
+
+- Não utilização de ORM para evitar classes anêmicas e incentivar o desenvolvimento
+  guiado pelo comportamento
+- Foi aplicado TDD e BDD
+- Os testes seguiram os princípios FIRST:
+  1.Rápidos - Fast
+  2.Independentes - Independent
+  3.Determinísticos - Repeatable
+  4.Auto-verificáveis - Self-Validating
+  5.Oportunos - Timely (TDD)
+- As mudanças de status do contrato e da requisição de cancelamento foram
+  inspirados em máquinas de estado
+- Foi utilizado o padrão Query Object para as queries, o que incentiva a
+  organização do código
+- Assim como o pydantic previne problemas de tipo com os dados do cliente, o
+  `restore` das entidades restaura o estado do objeto pelo banco de dados
+  previnindo possíveis problemas de tipo com o uso de `assert`
+- Os `services` foram quebrados em casos de uso para evitar `God Classes`
+- A duplicação de requerimentos de cancelamento com mesma chave de idempotência
+  foi evitado em nível de banco de dados através do uso de `ON CONFLICT (idempotency_key)`
+- A duplicação de requerimentos de cancelamento com diferents chaves de idempotência
+  foi considerado um requerimento novo válido. Porém para evitar a sobreposição
+  inválida de status, existe uma checagem do status esperado que deve corresponder
+  ao comportamento da entidade de contrato para a mudança ser bem sucedida
+
 ## Pontos de melhoria
 
 - Não retornar a entidade de contrato, mas sim o ID. Não revelar
   comportamento interno do sistema
+- Executar o processamento do contrato em backgroung e dar uma resposta imediata
+  ao cliente
+- Utilização de banco em memória para os testes
+- Utilização de contâiner de injeção de dependência
