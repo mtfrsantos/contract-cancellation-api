@@ -23,6 +23,8 @@ services:
     environment:
       - DATABASE_URL=postgresql://cancellation:cancellation@postgresql:5432/cancellation
       - DEPLOY_MODE="PRODUCTION"
+      - MINIMUM_POOL_SIZE=1
+      - MAXIMUM_POOL_SIZE=10
     depends_on:
       - postgresql
 
