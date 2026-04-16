@@ -12,7 +12,21 @@ services:
     volumes:
       - postgresql:/var/lib/postgresql/data
     restart: always
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    volumes:
+      - web:/code/app
+    environment:
+      - DATABASE_URL=postgresql://cancellation:cancellation@postgresql:5432/cancellation
+      - DEPLOY_MODE="PRODUCTION"
+    depends_on:
+      - postgresql
 
 volumes:
   postgresql:
+  web:
 
