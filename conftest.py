@@ -14,5 +14,4 @@ async def database_pool() -> AsyncGenerator[AsyncConnectionPool[Any], None]:
         min_size=environment_variables.MINIMUM_POOL_SIZE,
         max_size=environment_variables.MAXIMUM_POOL_SIZE,
     ) as pool:
-        # logger.info("Creating database asynchronous pool...")
         yield pool
