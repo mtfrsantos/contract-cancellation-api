@@ -9,6 +9,6 @@ class TablesTruncater:
         self._database: Database = Database(pool)
 
     async def execute(self) -> None:
-        statement = "TRUNCATE TABLE contracts"
+        statement = "TRUNCATE TABLE contracts, cancel_requests"
         query = Query(statement=statement)
         _ = await self._database.execute_query(query)
