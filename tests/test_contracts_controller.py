@@ -1,5 +1,8 @@
+import datetime
 from collections.abc import AsyncGenerator
+from decimal import Decimal
 from http import HTTPStatus
+from uuid import uuid4
 
 import pytest
 import pytest_asyncio
@@ -7,6 +10,8 @@ from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from psycopg_pool import AsyncConnectionPool
 
+from app.contract import Contract
+from app.contract_repository import ContractRepository
 from app.contract_status import ContractStatus
 from app.contracts_controller import contracts_controller
 
@@ -26,8 +31,25 @@ async def client(
         yield client
 
 
+@pytest_asyncio.fixture
+async def reprocess_contract_id(
+    database_pool: AsyncConnectionPool,
+) -> str:
+    current_datetime = datetime.datetime.now(tz=datetime.timezone.utc)
+    one_day_ago = current_datetime - datetime.timedelta(days=1)
+    ten_minutes_ago = current_datetime - datetime.timedelta(minutes=10)
+    contract = Contract(
+        amount=Decimal("1000"),
+        refundable_amount=Decimal("1000"),
+        created_at=one_day_ago,
+        updated_at=ten_minutes_ago,
+    )
+    contract_repository = ContractRepository(pool=database_pool)
+    return await contract_repository.save(contract)
+
+
 @pytest.mark.asyncio
-async def test_contracts_controller(client: AsyncClient) -> None:
+async def test_create_contracts(client: AsyncClient) -> None:
     payload = {
         "amount": 1000,
         "refundable_amount": 1000,
@@ -41,3 +63,42 @@ async def test_contracts_controller(client: AsyncClient) -> None:
     assert response_json.get("status") == ContractStatus.CREATED
     assert response_json.get("created_at")
     assert response_json.get("updated_at")
+
+
+@pytest.mark.asyncio
+async def test_cancel_requests(client: AsyncClient) -> None:
+    create_contract_payload = {
+        "amount": 1000,
+        "refundable_amount": 1000,
+    }
+    create_contract_response = await client.post(
+        url=f"{BASE_URL}/contracts", json=create_contract_payload
+    )
+    assert create_contract_response.status_code == HTTPStatus.ACCEPTED
+    create_contract_response_json = create_contract_response.json()
+    assert (
+        create_contract_response_json.get("status") == ContractStatus.CREATED
+    )
+    assert create_contract_response_json.get("contract_id")
+    contract_id = create_contract_response_json.get("contract_id")
+    idempotency_key = str(uuid4())
+    headers = {"x-idempotency-key": idempotency_key}
+    cancel_request_response = await client.post(
+        url=f"{BASE_URL}/contracts/{contract_id}/cancel",
+        headers=headers,
+    )
+    assert cancel_request_response.status_code == HTTPStatus.ACCEPTED
+    cancel_request_response_json = cancel_request_response.json()
+    assert cancel_request_response_json == {"status": "SUCCESS"}
+
+
+@pytest.mark.asyncio
+async def test_reprocess_contracts(
+    client: AsyncClient, reprocess_contract_id: str
+) -> None:
+    reprocess_contract_response = await client.post(
+        url=f"{BASE_URL}/contracts/{reprocess_contract_id}/reprocess"
+    )
+    assert reprocess_contract_response.status_code == HTTPStatus.ACCEPTED
+    reprocess_contract_response_json = reprocess_contract_response.json()
+    assert reprocess_contract_response_json == {"status": "CREATED"}
